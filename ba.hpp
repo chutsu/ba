@@ -107,29 +107,29 @@ struct ba_data_t {
   real_t **points;
   int nb_points;
 
-	ba_data_t(const std::string &data_path) {
-		cam_K = load_camera(data_path);
-		cam_poses = load_camera_poses(data_path);
-		target_pose = load_target_pose(data_path)[0];
-		nb_frames = cam_poses.size();
-		keypoints = load_keypoints(data_path);
-		point_ids = load_point_ids(data_path, &nb_ids);
-		points = load_points(data_path, &nb_points);
-	}
+  ba_data_t(const std::string &data_path) {
+    cam_K = load_camera(data_path);
+    cam_poses = load_camera_poses(data_path);
+    target_pose = load_target_pose(data_path)[0];
+    nb_frames = cam_poses.size();
+    keypoints = load_keypoints(data_path);
+    point_ids = load_point_ids(data_path, &nb_ids);
+    points = load_points(data_path, &nb_points);
+  }
 
-	~ba_data_t() {
-		// Point IDs
-		for (int i = 0; i < nb_frames; i++) {
-			free(point_ids[i]);
-		}
-		free(point_ids);
+  ~ba_data_t() {
+    // Point IDs
+    for (int i = 0; i < nb_frames; i++) {
+      free(point_ids[i]);
+    }
+    free(point_ids);
 
-		// Points
-		for (int i = 0; i < nb_points; i++) {
-			free(points[i]);
-		}
-		free(points);
-	}
+    // Points
+    for (int i = 0; i < nb_points; i++) {
+      free(points[i]);
+    }
+    free(points);
+  }
 };
 
 int ba_residual_size(ba_data_t &data);

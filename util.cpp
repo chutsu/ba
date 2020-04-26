@@ -2225,35 +2225,35 @@ real_t time_now() {
 }
 
 /*****************************************************************************
- *																BA DATA
+ *                                BA DATA
  ****************************************************************************/
 
 pose_t::pose_t() {}
 
 pose_t::pose_t(const mat4_t &T) {
-	const quat_t q{tf_quat(T)};
-	const vec3_t r{tf_trans(T)};
+  const quat_t q{tf_quat(T)};
+  const vec3_t r{tf_trans(T)};
 
-	param(0) = q.w();
-	param(1) = q.x();
-	param(2) = q.y();
-	param(3) = q.z();
+  param(0) = q.w();
+  param(1) = q.x();
+  param(2) = q.y();
+  param(3) = q.z();
 
-	param(4) = r(0);
-	param(5) = r(1);
-	param(6) = r(2);
+  param(4) = r(0);
+  param(5) = r(1);
+  param(6) = r(2);
 }
 
 quat_t pose_t::rot() const {
-	return quat_t{param[0], param[1], param[2], param[3]};
+  return quat_t{param[0], param[1], param[2], param[3]};
 }
 
 vec3_t pose_t::trans() const {
-	return vec3_t{param[4], param[5], param[6]};
+  return vec3_t{param[4], param[5], param[6]};
 }
 
 mat4_t pose_t::T() const {
-	return tf(rot(), trans());
+  return tf(rot(), trans());
 }
 
 quat_t pose_t::rot() { return static_cast<const pose_t &>(*this).rot(); }
@@ -2261,24 +2261,24 @@ vec3_t pose_t::trans() { return static_cast<const pose_t &>(*this).trans(); }
 mat4_t pose_t::T() { return static_cast<const pose_t &>(*this).T(); }
 
 void pose_t::set_trans(const vec3_t &r) {
-	param(4) = r(0);
-	param(5) = r(1);
-	param(6) = r(2);
+  param(4) = r(0);
+  param(5) = r(1);
+  param(6) = r(2);
 }
 
 void pose_t::set_rot(const quat_t &q) {
-	param(0) = q.w();
-	param(1) = q.x();
-	param(2) = q.y();
-	param(3) = q.z();
+  param(0) = q.w();
+  param(1) = q.x();
+  param(2) = q.y();
+  param(3) = q.z();
 }
 
 void pose_t::set_rot(const mat3_t &C) {
-	quat_t q{C};
-	param(0) = q.w();
-	param(1) = q.x();
-	param(2) = q.y();
-	param(3) = q.z();
+  quat_t q{C};
+  param(0) = q.w();
+  param(1) = q.x();
+  param(2) = q.y();
+  param(3) = q.z();
 }
 
 void pose_print(const std::string &prefix, const pose_t &pose) {

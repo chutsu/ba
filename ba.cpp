@@ -1,8 +1,8 @@
 #include "ba.hpp"
 
 void print_usage() {
-	printf("Usage: ba <data>\n");
-	printf("Example: ba ./data\n");
+  printf("Usage: ba <data>\n");
+  printf("Example: ba ./data\n");
 }
 
 static mat2_t J_intrinsics(const mat3_t &K) {
@@ -218,10 +218,10 @@ void ba_solve(ba_data_t &data) {
 }
 
 int main(int argc, char **argv) {
-	if (argc != 2) {
-		print_usage();
-		return -1;
-	}
+  if (argc != 2) {
+    print_usage();
+    return -1;
+  }
 
   struct timespec t_start = tic();
   ba_data_t data{std::string{argv[1]}};
@@ -230,5 +230,5 @@ int main(int argc, char **argv) {
   printf("nb_frames: %d\n", data.nb_frames);
   printf("nb_points: %d\n", data.nb_points);
 
-	return 0;
+  return 0;
 }
