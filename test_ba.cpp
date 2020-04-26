@@ -1,7 +1,7 @@
 #include "munit.hpp"
 #include "ba.hpp"
 
-#define TEST_DATA "./test_data/estimation/ba_data"
+#define TEST_DATA "./data"
 
 int check_J_cam_pose(const mat3_t &cam_K,
                      const mat4_t &T_WC,
