@@ -59,8 +59,8 @@
  *****************************************************************************/
 
 /* PRECISION TYPE */
-// #define PRECISION 1 // Single Precision
-#define PRECISION 2 // Double Precision
+#define PRECISION 1 // Single Precision
+// #define PRECISION 2 // Double Precision
 
 #if PRECISION == 1
   #define real_t float

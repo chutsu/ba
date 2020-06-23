@@ -189,6 +189,4 @@ void test_suite() {
   MU_ADD_TEST(test_ba_solve);
 }
 
-} // namespace proto
-
 MU_RUN_TESTS(test_suite);
