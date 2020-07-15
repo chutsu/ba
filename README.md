@@ -3,12 +3,17 @@
 Minimal Bundle Adjustment Example.
 
 
+## Dependencies
+
+    yaml-cpp (https://github.com/jbeder/yaml-cpp)
+    Eigen3 (http://eigen.tuxfamily.org/)
+
+
 ## Build and Run
 
     git clone https://github.com/chutsu/ba
     cd ba
     make
-    ./ba ./data
 
 
 ## Licence

@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 make
-./ba ./data
+make test

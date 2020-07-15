@@ -1,10 +1,5 @@
 #include "ba.hpp"
 
-void print_usage() {
-  printf("Usage: ba <data>\n");
-  printf("Example: ba ./data\n");
-}
-
 static mat2_t J_intrinsics(const mat3_t &K) {
   // J = [K[0, 0], 0.0,
   //      0.0, K[1, 1]];
@@ -215,46 +210,4 @@ void ba_solve(ba_data_t &data) {
     }
     cost_prev = cost;
   }
-}
-
-int main(int argc, char **argv) {
-  if (argc != 2) {
-    print_usage();
-    return -1;
-  }
-
-  struct timespec t_start = tic();
-  ba_data_t data{std::string{argv[1]}};
-  ba_solve(data);
-  printf("time taken: %fs\n", toc(&t_start));
-  printf("nb_frames: %d\n", data.nb_frames);
-  printf("nb_points: %d\n", data.nb_points);
-  printf("\n");
-
-  // Calculate Hessian
-  const matx_t E = ba_jacobian(data);
-  matx_t H = E.transpose() * E;
-
-  // Find rank(H)
-  Eigen::FullPivLU<matx_t> LU(H);
-  printf("rank(H): %ld\n", LU.rank());
-  printf("rows(H): %ld\n", H.rows());
-  printf("det(H): %f\n", LU.determinant());
-  printf("Is H invertible?: %d\n", ((LU.isInvertible()) ? 1 : -1));
-  printf("\n");
-
-  // Damp Hessian using Levenberg-Marquardt dampening
-  // Eq (2.27) in http://www.cs.cmu.edu/~kaess/pub/Dellaert17fnt.pdf
-  double lambda = 1e-4;
-  matx_t H_diag = H.diagonal().asDiagonal();
-  matx_t H_damped = H + lambda * H_diag;
-
-  // Check rank(H_damped)
-  Eigen::FullPivLU<matx_t> LU_damped(H_damped);
-  printf("rank(H_damped): %ld\n", LU_damped.rank());
-  printf("rows(H_damped): %ld\n", H_damped.rows());
-  printf("det(H_damped): %f\n", LU_damped.determinant());
-  printf("Is H_damped invertible?: %d\n", ((LU_damped.isInvertible()) ? 1 : -1));
-
-  return 0;
 }

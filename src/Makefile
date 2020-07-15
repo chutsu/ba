@@ -1,0 +1,37 @@
+BIN_DIR=../bin
+BLD_DIR=../build
+
+CXX=g++ -Wall -O3
+CXXFLAGS=-I/usr/include/eigen3
+LIBS=-L$(BLD_DIR) -lba -lyaml-cpp
+OBJS=$(BLD_DIR)/util.o $(BLD_DIR)/ba.o
+
+LIB_BA=$(BLD_DIR)/libba.a
+BA_SOLVER=$(BIN_DIR)/ba_solver
+TEST_BA=$(BIN_DIR)/test_ba
+
+default: dirs $(LIB_BA) $(TEST_BA) $(BA_SOLVER)
+.PHONY: dirs
+
+dirs:
+	@mkdir -p $(BIN_DIR)
+	@mkdir -p $(BLD_DIR)
+
+$(BLD_DIR)/%.o: %.cpp %.hpp
+	@echo "CXX [$<]"
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(LIB_BA): $(OBJS)
+	@echo "AR [libba.a]"
+	@ar rs $@ $^
+
+$(TEST_BA): test_ba.cpp
+	@echo "TEST [test_ba]"
+	$(CXX) $^ -o $@ $(LIBS) $(CXXFLAGS)
+
+$(BA_SOLVER): ba_solver.cpp $(OBJS)
+	@echo "EXE [ba_solver]"
+	@$(CXX) $^ -o $@ $(LIBS) $(CXXFLAGS)
+
+clean:
+	rm src/ba
