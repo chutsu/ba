@@ -1,7 +1,7 @@
 BIN_DIR=../bin
 BLD_DIR=../build
 
-CXX=g++ -Wall -O3
+CXX=g++ -std=c++11 -Wall -O3
 CXXFLAGS=-I/usr/include/eigen3
 LIBS=-L$(BLD_DIR) -lba -lyaml-cpp
 OBJS=$(BLD_DIR)/util.o $(BLD_DIR)/ba.o

@@ -3,8 +3,8 @@ BLD_DIR=build
 
 define usage
 [MAKE TARGETS]:
-	deps:
-		Install dependencies
+  deps:
+    Install dependencies
 
   ba:
     Build repo
