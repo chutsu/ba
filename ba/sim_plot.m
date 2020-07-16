@@ -275,12 +275,12 @@ data_est = load_data(data_est_dir);
 
 plot_compare_data("Before Optimization", data_gnd, data_noisy);
 if save_figs
-  print('-dpng', '-S800,800', 'ba_before.png')
+  print('-dpng', '-S1200,1200', 'ba_before.png')
 endif
 
 plot_compare_data("After Optimization", data_gnd, data_est);
 if save_figs
-  print('-dpng', '-S800,800', 'ba_after.png')
+  print('-dpng', '-S1200,1200', 'ba_after.png')
 endif
 
 if show_figs
