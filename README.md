@@ -1,4 +1,4 @@
-# ba
+# ba <img src="https://github.com/chutsu/ba/workflows/ci/badge.svg">
 
 Minimal Bundle Adjustment Example:
 
