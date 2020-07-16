@@ -31,6 +31,7 @@ dirs:
 
 deps:
 	@echo "Installing dependencies ..."
+	@sudo apt-get update
 	@sudo apt-get install -qqq libyaml-cpp-dev libeigen3-dev octave
 
 ba: dirs
