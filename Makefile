@@ -27,16 +27,14 @@ dirs:
 	@mkdir -p $(BLD_DIR)
 
 ba: dirs
-	@make -s -C src
-	@cp -R data bin
+	@make -s -C ba
 	@echo "Finished building! :)"
-	@echo ""
 
 unittest: ba
 	@cd bin && ./test_ba
 
 run: ba
-	@cd bin && ./ba_solver ./data
+	@cd bin && ./ba_solver ./data_noisy
 
 clean:
 	@echo "Cleaning repo..."

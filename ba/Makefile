@@ -32,6 +32,9 @@ $(TEST_BA): test_ba.cpp
 $(BA_SOLVER): ba_solver.cpp $(OBJS)
 	@echo "EXE [ba_solver]"
 	@$(CXX) $^ -o $@ $(LIBS) $(CXXFLAGS)
+	@cd $(BIN_DIR); ln -sf ../ba/sim_plot.m .
+	@cd $(BIN_DIR); ln -sf ../ba/data_gnd .
+	@cd $(BIN_DIR); ln -sf ../ba/data_noisy .
 
 clean:
 	rm src/ba

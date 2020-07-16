@@ -2,18 +2,26 @@
 
 Minimal Bundle Adjustment Example.
 
+![Demo](demo.png)
+
 
 ## Dependencies
 
     yaml-cpp (https://github.com/jbeder/yaml-cpp)
     Eigen3 (http://eigen.tuxfamily.org/)
+    octave (https://www.gnu.org/software/octave/)
+
+If youre in Ubuntu, you can obtain the dependencies via:
+
+    sudo apt-get install libyaml-cpp-dev libeigen3-dev octave
 
 
 ## Build and Run
 
     git clone https://github.com/chutsu/ba
     cd ba
-    make
+    make ba
+    make run
 
 
 ## Licence

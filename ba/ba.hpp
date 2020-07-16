@@ -46,3 +46,4 @@ matx_t ba_jacobian(ba_data_t &data);
 void ba_update(ba_data_t &data, const vecx_t &e, const matx_t &E);
 real_t ba_cost(const vecx_t &e);
 void ba_solve(ba_data_t &data);
+void ba_save(const ba_data_t &data, std::string &save_dir);

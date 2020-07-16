@@ -194,13 +194,17 @@ void ba_solve(ba_data_t &data) {
   real_t cost_prev = 0.0;
 
   for (int iter = 0; iter < max_iter; iter++) {
+    // Update
     struct timespec t_start = tic();
     const vecx_t e = ba_residuals(data);
     const matx_t E = ba_jacobian(data);
     ba_update(data, e, E);
 
+    // Print cost
     const real_t cost = ba_cost(e);
-    printf("- iter[%d] cost[%.4e] time: %fs\n", iter, cost, toc(&t_start));
+    printf("iter[%d] ", iter);
+    printf("cost[%.4e] ", cost);
+    printf("time: %fs\n", toc(&t_start));
 
     // Termination criteria
     real_t cost_diff = fabs(cost - cost_prev);
@@ -210,4 +214,109 @@ void ba_solve(ba_data_t &data) {
     }
     cost_prev = cost;
   }
+}
+
+void ba_save(const ba_data_t &data, std::string &save_dir) {
+  // Create save directory
+	const char last_char = save_dir[save_dir.length() - 1];
+	const std::string postfix = (last_char == '/') ? "" : "/";
+	save_dir += postfix;
+	const std::string cmd = "mkdir -p " + save_dir;
+	const int retval = system(cmd.c_str());
+	if (retval != 0) {
+		printf("Error! Failed to save results to [%s]", save_dir.c_str());
+	}
+
+  // Save camera matrix
+	{
+		const std::string csv_path = save_dir + "camera.csv";
+		FILE *camera_csv = fopen(csv_path.c_str(), "w");
+		fprintf(camera_csv, "#camera_K\n");
+		fprintf(camera_csv, "%f, 0.0000, %f\n", data.cam_K(0, 0), data.cam_K(0, 2));
+		fprintf(camera_csv, "0.0000, %f, %f\n", data.cam_K(1, 1), data.cam_K(1, 2));
+		fprintf(camera_csv, "0.0000, 0.0000, 1.0000\n");
+		fclose(camera_csv);
+	}
+
+  // Save camera poses
+	{
+		const std::string csv_path = save_dir + "camera_poses.csv";
+		FILE *poses_csv = fopen(csv_path.c_str(), "w");
+		fprintf(poses_csv, "#qw,qx,qy,qz,rx,ry,rz\n");
+		for (const auto &pose : data.cam_poses) {
+			const auto &q = pose.rot();
+			const auto &r = pose.trans();
+			fprintf(poses_csv, "%f,%f,%f,%f,", q.w(), q.x(), q.y(), q.z());
+			fprintf(poses_csv, "%f,%f,%f", r(0), r(1), r(2));
+			fprintf(poses_csv, "\n");
+		}
+		fclose(poses_csv);
+	}
+
+  // Save target pose
+	{
+		const std::string csv_path = save_dir + "target_pose.csv";
+		FILE *target_csv = fopen(csv_path.c_str(), "w");
+		fprintf(target_csv, "#qw,qx,qy,qz,rx,ry,rz\n");
+		{
+			const auto &q = data.target_pose.rot();
+			const auto &r = data.target_pose.trans();
+			fprintf(target_csv, "%f,%f,%f,%f,", q.w(), q.x(), q.y(), q.z());
+			fprintf(target_csv, "%f,%f,%f", r(0), r(1), r(2));
+			fprintf(target_csv, "\n");
+		}
+		fclose(target_csv);
+	}
+
+  // Save keypoints
+	{
+		const std::string csv_path = save_dir + "keypoints.csv";
+		FILE *keypoints_csv = fopen(csv_path.c_str(), "w");
+		fprintf(keypoints_csv, "#size,keypoints\n");
+		for (const auto &kps : data.keypoints) {
+			int nb_kps = kps.size();
+			fprintf(keypoints_csv, "%d,", nb_kps * 2);
+			for (int j = 0; j < nb_kps; j++) {
+				fprintf(keypoints_csv, "%f,", kps[j](0));
+				fprintf(keypoints_csv, "%f", kps[j](1));
+				if (j + 1 < nb_kps) {
+					fprintf(keypoints_csv, ",");
+				}
+			}
+			fprintf(keypoints_csv, "\n");
+		}
+		fclose(keypoints_csv);
+	}
+
+  // Save point ids
+	{
+		const std::string csv_path = save_dir + "point_ids.csv";
+		FILE *point_ids_csv = fopen(csv_path.c_str(), "w");
+		fprintf(point_ids_csv, "#size,point_ids\n");
+		for (int i = 0; i < data.nb_ids; i++) {
+			int nb_ids = data.point_ids[i][0];
+			fprintf(point_ids_csv, "%d,", data.point_ids[i][0]);
+			for (int j = 1; j < (nb_ids + 1); j++) {
+				fprintf(point_ids_csv, "%d", data.point_ids[i][j]);
+				if (j + 1 < (nb_ids + 1)) {
+					fprintf(point_ids_csv, ",");
+				}
+			}
+			fprintf(point_ids_csv, "\n");
+		}
+		fclose(point_ids_csv);
+	}
+
+  // Save points
+	{
+		const std::string csv_path = save_dir + "points.csv";
+		FILE *points_csv = fopen(csv_path.c_str(), "w");
+		fprintf(points_csv, "#x,y,z\n");
+		for (int i = 0; i < data.nb_points; i++) {
+			fprintf(points_csv, "%f,", data.points[i][0]);
+			fprintf(points_csv, "%f,", data.points[i][1]);
+			fprintf(points_csv, "%f\n", data.points[i][2]);
+		}
+		fclose(points_csv);
+	}
 }
