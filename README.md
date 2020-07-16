@@ -6,8 +6,8 @@ Minimal Bundle Adjustment Example:
   <img src="imgs/example.png" alt="BA Demo" width="100%" />
 </p>
 
-where red represents the ground truth and blue represents the initial camera 
-poses and landmark points before and after bundle adjustment. 
+where red represents the ground truth and blue represents the initial camera
+poses and landmark points before and after bundle adjustment.
 
 Example output:
 
@@ -19,10 +19,10 @@ Solving BA problem:
   - iter[3]   cost: 1.84e-01   time: 0.004s   rmse_reproj_error: 0.02px
   - iter[4]   cost: 2.51e-04   time: 0.004s   rmse_reproj_error: 0.00px
   - iter[5]   cost: 2.57e-06   time: 0.004s   rmse_reproj_error: 0.00px
-Done!                    
-total time taken: 0.0257s                            
-nb_frames: 20                               
-nb_points: 25 
+Done!
+total time taken: 0.0257s
+nb_frames: 20
+nb_points: 25
 ```
 
 ## Dependencies
@@ -40,6 +40,7 @@ If youre in Ubuntu, you can obtain the dependencies via:
 
     git clone https://github.com/chutsu/ba
     cd ba
+    make deps
     make ba
     make run
 

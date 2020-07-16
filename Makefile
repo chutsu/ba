@@ -3,6 +3,9 @@ BLD_DIR=build
 
 define usage
 [MAKE TARGETS]:
+	deps:
+		Install dependencies
+
   ba:
     Build repo
 
@@ -17,7 +20,7 @@ define usage
 endef
 export usage
 
-.PHONY: ba
+.PHONY: dirs dirs deps unittest run clean
 
 default:
 	@echo "$$usage"
@@ -25,6 +28,10 @@ default:
 dirs:
 	@mkdir -p $(BIN_DIR)
 	@mkdir -p $(BLD_DIR)
+
+deps:
+	@echo "Installing dependencies ..."
+	@sudo apt-get install -qqq libyaml-cpp-dev libeigen3-dev octave
 
 ba: dirs
 	@make -s -C ba
