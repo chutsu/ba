@@ -1,4 +1,8 @@
-# ba <a href="https://github.com/chutsu/ba/actions?query=ci"><img src="https://github.com/chutsu/ba/workflows/ci/badge.svg"></a>
+# ba 
+
+<a href="https://github.com/chutsu/ba/actions?query=ci">
+  <img src="https://github.com/chutsu/ba/workflows/ci/badge.svg">
+</a>
 
 Minimal Bundle Adjustment Example:
 
