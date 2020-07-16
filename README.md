@@ -3,7 +3,7 @@
 Minimal Bundle Adjustment Example.
 
 <p align="center">
-  <img src="imgs/demo.png" alt="BA Demo" width="80%" />
+  <img src="imgs/example.png" alt="BA Demo" width="80%" />
 </p>
 
 
