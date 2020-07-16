@@ -1,6 +1,6 @@
 #!/usr/bin/env octave-cli
 graphics_toolkit("fltk");
-save_figs = true;
+save_figs = false;
 show_figs = true;
 data_gnd_dir = "./data_gnd";  % Ground truth data
 data_noisy_dir = "./data_noisy";  % Noisy data
@@ -228,7 +228,7 @@ function plot_data(data)
   ginput;
 endfunction
 
-function plot_compare_data(title_name, data0, data1)
+function plot_compare_data(title_name, data0, data1, save_figs)
   figure();
   clf();
   hold on;
@@ -260,7 +260,11 @@ function plot_compare_data(title_name, data0, data1)
            data1.points(:, 3), 'b');
 
   % Plot settings
-  title(title_name, "fontsize", 18);
+  if save_figs
+    title(title_name, "fontsize", 40);
+  else
+    title(title_name, "fontsize", 20);
+  end
   xlabel("x [m]");
   ylabel("y [m]");
   zlabel("z [m]");
@@ -273,12 +277,12 @@ data_gnd = load_data(data_gnd_dir);
 data_noisy = load_data(data_noisy_dir);
 data_est = load_data(data_est_dir);
 
-plot_compare_data("Before Optimization", data_gnd, data_noisy);
+plot_compare_data("Before Optimization", data_gnd, data_noisy, save_figs);
 if save_figs
   print('-dpng', '-S1200,1200', 'ba_before.png')
 endif
 
-plot_compare_data("After Optimization", data_gnd, data_est);
+plot_compare_data("After Optimization", data_gnd, data_est, save_figs);
 if save_figs
   print('-dpng', '-S1200,1200', 'ba_after.png')
 endif
