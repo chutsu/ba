@@ -2,7 +2,8 @@
 
 Minimal Bundle Adjustment Example.
 
-![Demo](demo.png)
+![Before Optimization](ba_before.png)
+![After Optimization](ba_after.png)
 
 
 ## Dependencies

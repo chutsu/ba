@@ -1,5 +1,7 @@
 #!/usr/bin/env octave-cli
 graphics_toolkit("fltk");
+save_figs = true;
+show_figs = true;
 data_gnd_dir = "./data_gnd";  % Ground truth data
 data_noisy_dir = "./data_noisy";  % Noisy data
 data_est_dir = "./data_est";  % Estimated data
@@ -258,7 +260,7 @@ function plot_compare_data(title_name, data0, data1)
            data1.points(:, 3), 'b');
 
   % Plot settings
-  title(title_name);
+  title(title_name, "fontsize", 18);
   xlabel("x [m]");
   ylabel("y [m]");
   zlabel("z [m]");
@@ -270,6 +272,17 @@ endfunction
 data_gnd = load_data(data_gnd_dir);
 data_noisy = load_data(data_noisy_dir);
 data_est = load_data(data_est_dir);
+
 plot_compare_data("Before Optimization", data_gnd, data_noisy);
+if save_figs
+  print('-dpng', '-S800,800', 'ba_before.png')
+endif
+
 plot_compare_data("After Optimization", data_gnd, data_est);
-ginput();
+if save_figs
+  print('-dpng', '-S800,800', 'ba_after.png')
+endif
+
+if show_figs
+  ginput();
+endif

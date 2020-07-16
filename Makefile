@@ -35,6 +35,7 @@ unittest: ba
 
 run: ba
 	@cd bin && ./ba_solver ./data_noisy
+	@cd bin && octave-cli ./sim_plot.m ./data_noisy
 
 clean:
 	@echo "Cleaning repo..."

@@ -2,6 +2,7 @@
 set -e
 
 make ba
+make run
 # make unittest
 
 # cd bin; ./ba_solver ./data_noisy; cd -
