@@ -1,7 +1,7 @@
 #include "munit.hpp"
 #include "ba.hpp"
 
-#define TEST_DATA "./data"
+#define TEST_DATA "./data_noisy"
 
 // static int check_J_cam_pose(const mat3_t &cam_K,
 //                             const mat4_t &T_WC,

@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-make ba
-make run
-# make unittest
+# make ba
+# make run
+make unittest
 
 # cd bin; ./ba_solver ./data_noisy; cd -
 # cd ba; octave-cli sim_data.m; cd -
