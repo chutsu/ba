@@ -3,7 +3,7 @@ name: C/C++ CI
 on: [push]
 
 jobs:
-  build_proto:
+  ci:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@master
