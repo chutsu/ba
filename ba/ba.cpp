@@ -200,11 +200,19 @@ void ba_solve(ba_data_t &data) {
     const matx_t E = ba_jacobian(data);
     ba_update(data, e, E);
 
+    // Calculate reprojection error
+    double sse = 0.0;
+    for (int i = 0; i < e.size(); i++) {
+      sse += e(i) * e(i);
+    }
+    const double rmse_reproj_error = sqrt(sse / e.size());
+
     // Print cost
     const real_t cost = ba_cost(e);
-    printf("iter[%d] ", iter);
-    printf("cost[%.4e] ", cost);
-    printf("time: %fs\n", toc(&t_start));
+    printf("  - iter[%d]   ", iter);
+    printf("cost: %.2e   ", cost);
+    printf("time: %.3fs   ", toc(&t_start));
+    printf("rmse_reproj_error: %.2fpx\n", rmse_reproj_error);
 
     // Termination criteria
     real_t cost_diff = fabs(cost - cost_prev);

@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   ba_data_t data{std::string{argv[1]}};
   printf("Solving BA problem:\n");
   ba_solve(data);
-  printf("time taken: %fs\n", toc(&t_start));
+  printf("total time taken: %.4fs\n", toc(&t_start));
   printf("nb_frames: %d\n", data.nb_frames);
   printf("nb_points: %d\n", data.nb_points);
   printf("\n");
