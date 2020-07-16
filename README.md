@@ -1,11 +1,29 @@
 # ba
 
-Minimal Bundle Adjustment Example.
+Minimal Bundle Adjustment Example:
 
 <p align="center">
-  <img src="imgs/example.png" alt="BA Demo" width="80%" />
+  <img src="imgs/example.png" alt="BA Demo" width="100%" />
 </p>
 
+where red represents the ground truth and blue represents the initial camera 
+poses and landmark points before and after bundle adjustment. 
+
+Example output:
+
+```
+Solving BA problem:
+  - iter[0]   cost: 1.05e+06   time: 0.004s   rmse_reproj_error: 47.07px
+  - iter[1]   cost: 3.01e+04   time: 0.004s   rmse_reproj_error: 7.97px
+  - iter[2]   cost: 1.76e+02   time: 0.004s   rmse_reproj_error: 0.61px
+  - iter[3]   cost: 1.84e-01   time: 0.004s   rmse_reproj_error: 0.02px
+  - iter[4]   cost: 2.51e-04   time: 0.004s   rmse_reproj_error: 0.00px
+  - iter[5]   cost: 2.57e-06   time: 0.004s   rmse_reproj_error: 0.00px
+Done!                    
+total time taken: 0.0257s                            
+nb_frames: 20                               
+nb_points: 25 
+```
 
 ## Dependencies
 
