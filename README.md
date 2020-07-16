@@ -2,12 +2,9 @@
 
 Minimal Bundle Adjustment Example.
 
-<p align="center>
-<img src="imgs/ba_before.png" alt="Before BA" width="40%" />
-</p>
-
-<p align="center>
-<img src="imgs/ba_after.png" alt="After BA" width="40%" />
+<p align="center">
+  <img src="imgs/ba_before.png" alt="Before BA" width="40%" />
+  <img src="imgs/ba_after.png" alt="After BA" width="40%" />
 </p>
 
 
