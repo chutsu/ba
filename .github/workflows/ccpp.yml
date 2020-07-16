@@ -1,21 +1,15 @@
-name: C/C++ CI
-
+name: ci
 on: [push]
-
 jobs:
   ci:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@master
-
     - name: innstall deps
       run: make deps
-
     - name: build
       run: make ba
-
     - name: run
       run: make run
-
     - name: unittest
       run: make unittest
