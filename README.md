@@ -2,8 +2,13 @@
 
 Minimal Bundle Adjustment Example.
 
-![Before Optimization](ba_before.png)
-![After Optimization](ba_after.png)
+<p align="center>
+  <img src="ba_before.png" width="40%"/>
+</p>
+                                      
+<p align="center>
+  <img src="ba_after.png" width="40%"/>
+</p>                                      
 
 
 ## Dependencies
