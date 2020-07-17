@@ -7,7 +7,7 @@ void print_usage() {
 }
 
 int main(int argc, char **argv) {
-	std::string save_path = "./data_est";
+  std::string save_path = "./data_est";
   if (argc != 2) {
     print_usage();
     return -1;
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
   printf("nb_frames: %d\n", data.nb_frames);
   printf("nb_points: %d\n", data.nb_points);
   printf("\n");
-	ba_save(data, save_path);
+  ba_save(data, save_path);
 
   return 0;
 }

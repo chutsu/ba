@@ -119,19 +119,19 @@ endfunction
 
 function T_WT = load_target_pose(data_dir)
   csv = csvread(strcat(data_dir, "/target_pose.csv"), 1, 0);
-	q_WT = csv(1, 1:4)';
-	r_WT = csv(1, 5:7)';
-	T_WT = tf(q_WT, r_WT);
+  q_WT = csv(1, 1:4)';
+  r_WT = csv(1, 5:7)';
+  T_WT = tf(q_WT, r_WT);
 endfunction
 
 function data = load_data(data_dir)
-	data = {};
-	data.cam_K = load_cam_K(data_dir);
-	data.cam_poses = load_cam_poses(data_dir);
-	data.keypoints = load_keypoints(data_dir);
-	data.point_ids = load_point_ids(data_dir);
-	data.points = load_points(data_dir);
-	data.T_WT = load_target_pose(data_dir);
+  data = {};
+  data.cam_K = load_cam_K(data_dir);
+  data.cam_poses = load_cam_poses(data_dir);
+  data.keypoints = load_keypoints(data_dir);
+  data.point_ids = load_point_ids(data_dir);
+  data.points = load_points(data_dir);
+  data.T_WT = load_target_pose(data_dir);
 endfunction
 
 function draw_frame(T_WB, scale=1.1)
@@ -205,7 +205,7 @@ function plot_data(data)
   clf();
   hold on;
 
-	% Draw camera poses
+  % Draw camera poses
   for i = 1:length(data.cam_poses)
     q_WC = data.cam_poses{i}.q_WC;
     r_WC = data.cam_poses{i}.r_WC;
@@ -215,10 +215,10 @@ function plot_data(data)
     draw_frame(T_WC, 0.05);
   endfor
 
-	% 3D landmark points
-	scatter3(data.points(:, 1),
-			 	 	 data.points(:, 2),
-			 	 	 data.points(:, 3), 'r');
+  % 3D landmark points
+  scatter3(data.points(:, 1),
+             data.points(:, 2),
+             data.points(:, 3), 'r');
 
   xlabel("x [m]");
   ylabel("y [m]");
