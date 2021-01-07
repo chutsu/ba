@@ -11,9 +11,7 @@ LIBS=-L$(BLD_DIR) \
 	-lblas \
 	-llapack \
 	-lpthread \
-	-lm \
-	-L/usr/X11R6/lib -lX11 \
-	-lGL -lGLU
+	-lm
 OBJS=$(BLD_DIR)/util.o
 
 LIBBA=$(BLD_DIR)/libba.a
