@@ -39,10 +39,8 @@ If youre in Ubuntu, you can obtain the dependencies via:
 
 	sudo apt-get install -qqq \
 		libblas-dev \
-		libblas-doc \
-		liblapacke-dev \
-		liblapack-doc \
 		liblapack-dev \
+		liblapacke-dev \
 		libeigen3-dev \
 		octave
 
