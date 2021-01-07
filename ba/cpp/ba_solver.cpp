@@ -1,5 +1,4 @@
 #include "ba.hpp"
-#include "util.hpp"
 
 void print_usage() {
   printf("Usage: ba_solver <data>\n");

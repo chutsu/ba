@@ -210,6 +210,8 @@ int test_load_keypoints() {
     /* keypoints_print(keypoints[i]); */
   }
 
+  MU_CHECK(keypoints.size() == 20);
+
   return 0;
 }
 
@@ -222,7 +224,7 @@ int test_ba_residuals() {
   // }
 
   const double cost = ba_cost(r);
-  printf("Cost: %f\n", cost);
+  printf("Cost: %e\n", cost);
 
   return 0;
 }
@@ -237,7 +239,7 @@ int test_ba_jacobian() {
   // }
 
   matx_t J = ba_jacobian(data);
-  mat2csv("/tmp/J.csv", J);
+  mat2csv("/tmp/J1.csv", J);
 
   return 0;
 }
@@ -246,7 +248,13 @@ int test_ba_update() {
   ba_data_t data{TEST_DATA};
   const vecx_t e = ba_residuals(data);
   const matx_t E = ba_jacobian(data);
+  printf("cost [before update]: %f\n", ba_cost(e));
   ba_update(data, e, E);
+
+  {
+    const vecx_t e = ba_residuals(data);
+    printf("cost [after update]: %f\n", ba_cost(e));
+  }
 
   return 0;
 }
@@ -263,8 +271,8 @@ int test_ba_cost() {
 }
 
 int test_ba_solve() {
-  struct timespec t_start = tic();
   ba_data_t data{TEST_DATA};
+  struct timespec t_start = tic();
   ba_solve(data);
   printf("time taken: %fs\n", toc(&t_start));
   printf("nb_frames: %d\n", data.nb_frames);
@@ -274,13 +282,13 @@ int test_ba_solve() {
 }
 
 void test_suite() {
-  MU_ADD_TEST(test_parse_keypoints_line);
-  MU_ADD_TEST(test_load_keypoints);
-  MU_ADD_TEST(test_ba_residuals);
-  MU_ADD_TEST(test_ba_jacobian);
+  // MU_ADD_TEST(test_parse_keypoints_line);
+  // MU_ADD_TEST(test_load_keypoints);
+  // MU_ADD_TEST(test_ba_residuals);
+  // MU_ADD_TEST(test_ba_jacobian);
   MU_ADD_TEST(test_ba_update);
-  MU_ADD_TEST(test_ba_cost);
-  MU_ADD_TEST(test_ba_solve);
+  // MU_ADD_TEST(test_ba_cost);
+  // MU_ADD_TEST(test_ba_solve);
 }
 
 MU_RUN_TESTS(test_suite);

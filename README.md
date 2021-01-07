@@ -1,4 +1,4 @@
-# ba 
+# ba
 
 <a href="https://github.com/chutsu/ba/actions?query=ci">
   <img src="https://github.com/chutsu/ba/workflows/ci/badge.svg">
@@ -47,6 +47,7 @@ If youre in Ubuntu, you can obtain the dependencies via:
     make deps
     make ba
     make run
+    make plot
 
 
 ## Licence

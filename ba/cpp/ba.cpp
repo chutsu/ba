@@ -125,16 +125,17 @@ matx_t ba_jacobian(ba_data_t &data) {
       int cs = pose_idx * 6;
       const mat2_t J_K = J_intrinsics(data.cam_K);
       const matx_t J_P = J_project(p_C);
+      const matx_t J_h = J_K * J_P;
       const mat3_t J_C = J_camera_rotation(q_WC, r_WC, p_W);
       const mat3_t J_r = J_camera_translation(q_WC);
-      const matx_t J_cam_rot = -1 * J_K * J_P * J_C;
-      const matx_t J_cam_pos = -1 * J_K * J_P * J_r;
+      const matx_t J_cam_rot = -1 * J_h * J_C;
+      const matx_t J_cam_pos = -1 * J_h * J_r;
       J.block(rs, cs, 2, 3) = J_cam_rot;
       J.block(rs, cs + 3, 2, 3) = J_cam_pos;
 
       // Point jacobian
       cs = (data.nb_frames * 6) + point_ids[i] * 3;
-      const matx_t J_point = -1 * J_K * J_P * J_target_point(q_WC);
+      const matx_t J_point = -1 * J_h * J_target_point(q_WC);
       J.block(rs, cs, 2, 3) = J_point;
 
       meas_idx++;
@@ -146,11 +147,7 @@ matx_t ba_jacobian(ba_data_t &data) {
 }
 
 void ba_update(ba_data_t &data, const vecx_t &e, const matx_t &E) {
-  // const real_t lambda = 10.0;  // LM damping term
-  const real_t lambda = 0.001;  // LM damping term
-
-  // Form weight matrix
-  // W = diag(repmat(sigma, data->nb_measurements, 1));
+  const real_t lambda = 1e-4;  // LM damping term
 
   // Solve Gauss-Newton system [H dx = g]: Solve for dx
   matx_t H = E.transpose() * E; // Hessian approx: H = J^t J
@@ -202,10 +199,15 @@ void ba_solve(ba_data_t &data) {
 
     // Calculate reprojection error
     double sse = 0.0;
-    for (int i = 0; i < e.size(); i++) {
-      sse += e(i) * e(i);
+    int N = 0;
+    for (int i = 0; i < e.size(); i += 2) {
+      const real_t dx = e(i);
+      const real_t dy = e(i + 1);
+      const real_t reproj_error = sqrt(dx * dx + dy * dy);
+      sse += reproj_error * reproj_error;
+      N++;
     }
-    const double rmse_reproj_error = sqrt(sse / e.size());
+    const double rmse_reproj_error = sqrt(sse / N);
 
     // Print cost
     const real_t cost = ba_cost(e);

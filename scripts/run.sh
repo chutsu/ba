@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
+# ctags -R .
 
+# make clean
 # make ba
+# make runc
 # make run
-make unittest
+# make unittest
 
-# cd bin; ./ba_solver ./data_noisy; cd -
 # cd ba; octave-cli sim_data.m; cd -
 # cd bin; octave-cli sim_plot.m; cd -

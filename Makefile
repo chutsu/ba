@@ -1,6 +1,3 @@
-BIN_DIR=bin
-BLD_DIR=build
-
 define usage
 [MAKE TARGETS]:
   deps:
@@ -15,38 +12,42 @@ define usage
   run:
     Run bundle adjustment solver
 
+  plot:
+    Plot results
+
   clean:
     Clean build and bin directories
 endef
 export usage
 
-.PHONY: dirs dirs deps unittest run clean
+.PHONY: ba deps unittest run clean
 
 default:
 	@echo "$$usage"
-
-dirs:
-	@mkdir -p $(BIN_DIR)
-	@mkdir -p $(BLD_DIR)
 
 deps:
 	@echo "Installing dependencies ..."
 	@sudo apt-get update
 	@sudo apt-get install -qqq libyaml-cpp-dev libeigen3-dev octave
 
-ba: dirs
-	@make -s -C ba
-	@echo "Finished building! :)"
+ba:
+	@make -s -C ba/c
+	@make -s -C ba/cpp
 
 unittest: ba
 	@cd bin && ./test_ba
 
 run: ba
-	@cd bin && ./ba_solver ./data_noisy
-	@cd bin && octave-cli ./sim_plot.m ./data_noisy
+	@cd ba/cpp/bin && ./ba_solver ./data_noisy
+
+plot: ba run
+	@cd ba/cpp/bin && octave-cli sim_plot.m
+
+runc: ba
+	@cd ba/c/bin && ./ba_solver ./data_noisy
 
 clean:
 	@echo "Cleaning repo..."
-	@rm -rf bin
-	@rm -rf build
+	@make -s -C ba/c clean
+	@make -s -C ba/cpp clean
 	@echo "Done!"
