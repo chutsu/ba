@@ -1,16 +1,19 @@
 #include "munit.h"
 #include "ba.h"
 
-#define TEST_BA_DATA_GT "test_data/data_gnd"
-#define TEST_BA_DATA "test_data/data_noisy"
-#define TEST_BA_JAC "test_data/ba_jacobian.csv"
-#define TEST_BA_UPDATE_DX "test_data/ba_update_dx.csv"
+#define TEST_BA_DATA_GT "./data_gnd"
+#define TEST_BA_DATA "./data_noisy"
+#define TEST_BA_JAC "./ba_jacobian.csv"
+#define TEST_BA_UPDATE_DX "./ba_update_dx.csv"
 
 #define STEP_SIZE 1e-8
 #define THRESHOLD 1e-3
 
 static void
-project(const real_t *K, const real_t *T_WC, const real_t *p_W, real_t *z) {
+project(const real_t *cam_params,
+        const real_t *T_WC,
+        const real_t *p_W,
+        real_t *z) {
   /* Invert camera pose to T_CW */
   real_t T_CW[4 * 4] = {0};
   tf_inv(T_WC, T_CW);
@@ -24,20 +27,25 @@ project(const real_t *K, const real_t *T_WC, const real_t *p_W, real_t *z) {
   const real_t y = p_C[1] / p_C[2];
 
   /* Scale and center */
-  const real_t fx = K[0];
-  const real_t fy = K[4];
-  const real_t cx = K[2];
-  const real_t cy = K[5];
+  const real_t fx = cam_params[0];
+  const real_t fy = cam_params[1];
+  const real_t cx = cam_params[2];
+  const real_t cy = cam_params[3];
   z[0] = fx * x + cx;
   z[1] = fy * y + cy;
 }
 
-static int check_J_cam_pose(const real_t *cam_K,
+static int check_J_cam_pose(const real_t *cam_params,
                             const real_t *T_WC,
                             const real_t *p_W,
                             const real_t *J_cam_pose) {
+#if PRECISION == 1
+  const real_t step_size = 1e-4;
+  const real_t threshold = 1e-1;
+#else
   const real_t step_size = 1e-8;
-  const real_t threshold = 1e-2;
+  const real_t threshold = 1e-4;
+#endif
   const real_t z[2] = {0.0, 0.0};
   real_t fdiff[2 * 6] = {0.0};
 
@@ -50,7 +58,7 @@ static int check_J_cam_pose(const real_t *cam_K,
     tf_perturb_rot(T_WC_fd, step_size, i);
     // -- Project landmark to image plane
     real_t z_fd[2] = {0};
-    project(cam_K, T_WC_fd, p_W, z_fd);
+    project(cam_params, T_WC_fd, p_W, z_fd);
     // -- Calculate reprojection error
     real_t e_fd[2] = {0};
     e_fd[0] = z[0] - z_fd[0];
@@ -63,7 +71,7 @@ static int check_J_cam_pose(const real_t *cam_K,
     tf_perturb_rot(T_WC_bd, -step_size, i);
     // -- Project landmark to image plane
     real_t z_bd[2] = {0};
-    project(cam_K, T_WC_bd, p_W, z_bd);
+    project(cam_params, T_WC_bd, p_W, z_bd);
     // -- Calculate reprojection error
     real_t e_bd[2] = {0};
     e_bd[0] = z[0] - z_bd[0];
@@ -83,7 +91,7 @@ static int check_J_cam_pose(const real_t *cam_K,
     tf_perturb_trans(T_WC_fd, step_size, i);
     // -- Project landmark to image plane
     real_t z_fd[2] = {0};
-    project(cam_K, T_WC_fd, p_W, z_fd);
+    project(cam_params, T_WC_fd, p_W, z_fd);
     // -- Calculate reprojection error
     real_t e_fd[2] = {z[0] - z_fd[0], z[1] - z_fd[1]};
 
@@ -94,7 +102,7 @@ static int check_J_cam_pose(const real_t *cam_K,
     tf_perturb_trans(T_WC_bd, -step_size, i);
     // -- Project landmark to image plane
     real_t z_bd[2] = {0};
-    project(cam_K, T_WC_bd, p_W, z_bd);
+    project(cam_params, T_WC_bd, p_W, z_bd);
     // -- Calculate reprojection error
     real_t e_bd[2] = {z[0] - z_bd[0], z[1] - z_bd[1]};
 
@@ -106,12 +114,17 @@ static int check_J_cam_pose(const real_t *cam_K,
   return check_jacobian("J_cam_pose", fdiff, J_cam_pose, 2, 6, threshold, 1);
 }
 
-static int check_J_landmark(const real_t *cam_K,
+static int check_J_landmark(const real_t *cam_params,
                             const real_t *T_WC,
                             const real_t *p_W,
                             const real_t *J_landmark) {
+#if PRECISION == 1
+  const real_t step_size = 1e-4;
+  const real_t threshold = 1e-1;
+#else
   const real_t step_size = 1e-8;
   const real_t threshold = 1e-2;
+#endif
   const real_t z[2] = {0.0, 0.0};
   real_t fdiff[2 * 6] = {0.0};
 
@@ -123,7 +136,7 @@ static int check_J_landmark(const real_t *cam_K,
     p_W_fd[i] += step_size;
     // -- Project landmark to image plane
     real_t z_fd[2] = {0};
-    project(cam_K, T_WC, p_W_fd, z_fd);
+    project(cam_params, T_WC, p_W_fd, z_fd);
     // -- Calculate reprojection error
     real_t e_fd[2] = {z[0] - z_fd[0], z[1] - z_fd[1]};
 
@@ -133,7 +146,7 @@ static int check_J_landmark(const real_t *cam_K,
     p_W_bd[i] -= step_size;
     // -- Project landmark to image plane
     real_t z_bd[2] = {0};
-    project(cam_K, T_WC, p_W_bd, z_bd);
+    project(cam_params, T_WC, p_W_bd, z_bd);
     // -- Calculate reprojection error
     real_t e_bd[2] = {z[0] - z_bd[0], z[1] - z_bd[1]};
 
@@ -211,7 +224,7 @@ int test_ba_residuals() {
 
 int test_J_cam_pose() {
   /* Setup camera intrinsics */
-  real_t cam_K[3 * 3] = {640.0, 0.0, 320.0, 0.0, 480.0, 240.0, 0.0, 0.0, 1.0};
+  real_t cam_params[4] = {640.0, 320.0, 480.0, 240.0};
 
   /* Setup camera pose */
   /* -- Rotation -- */
@@ -244,7 +257,7 @@ int test_J_cam_pose() {
   real_t J_K[2 * 2] = {0};
   real_t J_P[2 * 3] = {0};
   real_t J_h[2 * 3] = {0};
-  J_intrinsics_point(cam_K, J_K);
+  J_intrinsics_point(cam_params, J_K);
   J_project(p_C, J_P);
   dot(J_K, 2, 2, J_P, 2, 3, J_h);
 
@@ -268,7 +281,7 @@ int test_J_cam_pose() {
   mat_block_set(J_cam_pose, 6, 0, 3, 1, 5, J_cam_pos);
 
   /* Check jacobians */
-  int retval = check_J_cam_pose(cam_K, T_WC, p_W, J_cam_pose);
+  int retval = check_J_cam_pose(cam_params, T_WC, p_W, J_cam_pose);
   MU_CHECK(retval == 0);
 
   return 0;
@@ -276,7 +289,7 @@ int test_J_cam_pose() {
 
 int test_J_landmark() {
   /* Setup camera intrinsics */
-  real_t cam_K[3 * 3] = {640.0, 0.0, 320.0, 0.0, 480.0, 240.0, 0.0, 0.0, 1.0};
+  real_t cam_params[4] = {640.0, 320.0, 480.0, 240.0};
 
   /* Setup camera pose */
   /* -- Rotation -- */
@@ -311,7 +324,7 @@ int test_J_landmark() {
   real_t J_KP[2 * 3] = {0};
   real_t J_L[3 * 3] = {0};
   real_t J_landmark[2 * 3] = {0};
-  J_intrinsics_point(cam_K, J_K);
+  J_intrinsics_point(cam_params, J_K);
   J_project(p_C, J_P);
   J_target_point(q_WC, J_L);
   dot(J_K, 2, 2, J_P, 2, 3, J_KP);
@@ -319,71 +332,8 @@ int test_J_landmark() {
   mat_scale(J_landmark, 2, 3, -1);
 
   /* Check jacobians */
-  int retval = check_J_landmark(cam_K, T_WC, p_W, J_landmark);
+  int retval = check_J_landmark(cam_params, T_WC, p_W, J_landmark);
   MU_CHECK(retval == 0);
-
-  return 0;
-}
-
-int test_ba_jacobian() {
-  /* Test function */
-  int J_rows = 0;
-  int J_cols = 0;
-  ba_data_t *data = ba_load_data(TEST_BA_DATA);
-  real_t *J = ba_jacobian(data, &J_rows, &J_cols);
-  mat_save("/tmp/J0.csv", J, J_rows, J_cols);
-
-  /* #<{(| Load ground truth jacobian |)}># */
-  /* int nb_rows = 0.0; */
-  /* int nb_cols = 0.0; */
-  /* real_t **J_data = csv_data(TEST_BA_JAC, &nb_rows, &nb_cols); */
-  /*  */
-  /* #<{(| Compare calculated jacobian against ground truth jacobian |)}># */
-  /* MU_CHECK(J_rows == nb_rows); */
-  /* MU_CHECK(J_cols == nb_cols); */
-  /* int index = 0; */
-  /* int jac_ok = 1; */
-
-  /*   for (int i = 0; i < nb_rows; i++) { */
-  /*     for (int j = 0; j < nb_cols; j++) { */
-  /*       if (fabs(J_data[i][j] - J[index]) > 1e-5) { */
-  /*         printf("row: [%d] col: [%d] index: [%d] ", i, j, index); */
-  /*         printf("expected: [%f] ", J_data[i][j]); */
-  /*         printf("got: [%f]\n", J[index]); */
-  /*         jac_ok = 0; */
-  /*         goto end; */
-  /*       } */
-  /*       index++; */
-  /*     } */
-  /*   } */
-  /* end: */
-  /*   MU_CHECK(jac_ok == 1); */
-
-  /* Clean up */
-  free(J);
-  ba_data_free(data);
-  /* OCTAVE_SCRIPT("scripts/plot_matrix.m /tmp/J.csv"); */
-
-  return 0;
-}
-
-int test_ba_update() {
-  ba_data_t *data = ba_load_data(TEST_BA_DATA);
-
-  int e_size = 0;
-  real_t *e_before = ba_residuals(data, &e_size);
-  printf("before:  %f\n", ba_cost(e_before, e_size));
-
-  real_t *dx = load_vector(TEST_BA_UPDATE_DX);
-  ba_update(data, dx);
-
-  real_t *e_after = ba_residuals(data, &e_size);
-  printf("after:  %f\n", ba_cost(e_after, e_size));
-
-  free(dx);
-  free(e_before);
-  free(e_after);
-  ba_data_free(data);
 
   return 0;
 }
@@ -416,8 +366,6 @@ void test_suite() {
   MU_ADD_TEST(test_ba_residuals);
   MU_ADD_TEST(test_J_cam_pose);
   MU_ADD_TEST(test_J_landmark);
-  MU_ADD_TEST(test_ba_jacobian);
-  MU_ADD_TEST(test_ba_update);
   MU_ADD_TEST(test_ba_cost);
   MU_ADD_TEST(test_ba_solve);
 }

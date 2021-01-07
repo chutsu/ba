@@ -41,6 +41,8 @@ ba:
 	@make -s -C ba/cpp
 
 unittest: ba
+	@echo "Running unittests"
+	@cd ba/c/bin && ./test_ba
 	@cd ba/cpp/bin && ./test_ba
 
 run: ba

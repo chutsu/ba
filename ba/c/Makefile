@@ -18,7 +18,7 @@ LIBBA=$(BLD_DIR)/libba.a
 BA_SOLVER=$(BIN_DIR)/ba_solver
 TEST_BA=$(BIN_DIR)/test_ba
 
-default: dirs $(OBJS) $(LIBBA) $(BA_SOLVER)
+default: dirs $(OBJS) $(LIBBA) $(BA_SOLVER) $(TEST_BA)
 .PHONY: dirs
 
 dirs:
@@ -35,11 +35,11 @@ $(BLD_DIR)/%.o : %.c %.h
 
 $(LIBBA): $(OBJS)
 	@echo "AR [libba.a]"
-	@ar rvs $@ $^ 
+	@ar rvs $@ $^
 
-# $(TEST_BA): test_ba.c ba.h
-# 	@echo "TEST [test_ba]"
-# 	$(CC) $^ -o $@ $(LIBS) $(CFLAGS)
+$(TEST_BA): test_ba.c ba.h
+	@echo "TEST [test_ba]"
+	$(CC) $^ -o $@ $(LIBS) $(CFLAGS)
 
 $(BA_SOLVER): ba_solver.c $(OBJS)
 	@echo "EXE [ba_solver]"
