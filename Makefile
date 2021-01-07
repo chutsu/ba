@@ -37,6 +37,7 @@ deps:
 
 ba:
 	@make -s -C ba/c
+	@echo ""
 	@make -s -C ba/cpp
 
 unittest: ba
@@ -56,3 +57,4 @@ clean:
 	@make -s -C ba/c clean
 	@make -s -C ba/cpp clean
 	@echo "Done!"
+	@echo ""

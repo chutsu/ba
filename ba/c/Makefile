@@ -34,9 +34,8 @@ $(BLD_DIR)/%.o : %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBBA): $(OBJS)
-	@echo $(OBJS)
 	@echo "AR [libba.a]"
-	@ar rs $@ $^
+	@ar rvs $@ $^ 
 
 # $(TEST_BA): test_ba.c ba.h
 # 	@echo "TEST [test_ba]"

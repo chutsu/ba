@@ -2,7 +2,7 @@
 set -e
 # ctags -R .
 
-# make clean
+make clean
 make ba
 make run
 make runc

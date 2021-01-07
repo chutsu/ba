@@ -6,7 +6,7 @@ BIN_DIR=$(MKFDIR)/bin
 
 CXX=g++
 CXXFLAGS=-std=c++11 -Wall -O2 -I/usr/include/eigen3
-LIBS=-L$(BLD_DIR) -lba -lyaml-cpp
+LIBS=-L$(BLD_DIR) -lba
 OBJS=$(BLD_DIR)/util.o $(BLD_DIR)/ba.o
 
 LIBBA=$(BLD_DIR)/libba.a
@@ -30,7 +30,7 @@ $(BLD_DIR)/%.o: %.cpp %.hpp
 
 $(LIBBA): $(OBJS)
 	@echo "AR [libba.a]"
-	@ar rs $@ $^
+	@ar rvs $@ $^
 
 $(TEST_BA): test_ba.cpp ba.cpp
 	@echo "TEST [test_ba]"
