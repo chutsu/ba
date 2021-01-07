@@ -31,13 +31,13 @@ nb_points: 25
 
 ## Dependencies
 
-    yaml-cpp (https://github.com/jbeder/yaml-cpp)
+    LAPACKE (http://www.netlib.org/lapack/lapacke.html)
     Eigen3 (http://eigen.tuxfamily.org/)
     octave (https://www.gnu.org/software/octave/)
 
 If youre in Ubuntu, you can obtain the dependencies via:
 
-    sudo apt-get install libyaml-cpp-dev libeigen3-dev octave
+	  sudo apt-get install -qqq liblapack-dev libeigen3-dev octave
 
 
 ## Build and Run
