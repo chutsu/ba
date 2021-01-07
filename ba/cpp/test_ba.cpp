@@ -282,13 +282,13 @@ int test_ba_solve() {
 }
 
 void test_suite() {
-  // MU_ADD_TEST(test_parse_keypoints_line);
-  // MU_ADD_TEST(test_load_keypoints);
-  // MU_ADD_TEST(test_ba_residuals);
-  // MU_ADD_TEST(test_ba_jacobian);
+  MU_ADD_TEST(test_parse_keypoints_line);
+  MU_ADD_TEST(test_load_keypoints);
+  MU_ADD_TEST(test_ba_residuals);
+  MU_ADD_TEST(test_ba_jacobian);
   MU_ADD_TEST(test_ba_update);
-  // MU_ADD_TEST(test_ba_cost);
-  // MU_ADD_TEST(test_ba_solve);
+  MU_ADD_TEST(test_ba_cost);
+  MU_ADD_TEST(test_ba_solve);
 }
 
 MU_RUN_TESTS(test_suite);
