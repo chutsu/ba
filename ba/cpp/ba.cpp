@@ -218,7 +218,7 @@ void ba_solve(ba_data_t &data) {
 
     // Termination criteria
     real_t cost_diff = fabs(cost - cost_prev);
-    if (cost_diff < 1.0e-3) {
+    if (cost_diff < 1.0e-1) {
       printf("Done!\n");
       break;
     }

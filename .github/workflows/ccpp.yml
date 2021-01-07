@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@master
-    - name: innstall deps
+    - name: install deps
       run: make deps
     - name: build
       run: make ba

@@ -3,9 +3,9 @@ set -e
 # ctags -R .
 
 # make clean
-# make ba
-# make runc
-# make run
+make ba
+make run
+make runc
 # make unittest
 
 # cd ba; octave-cli sim_data.m; cd -

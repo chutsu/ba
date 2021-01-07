@@ -37,7 +37,14 @@ nb_points: 25
 
 If youre in Ubuntu, you can obtain the dependencies via:
 
-	  sudo apt-get install -qqq liblapack-dev libeigen3-dev octave
+	sudo apt-get install -qqq \
+		libblas-dev \
+		libblas-doc \
+		liblapacke-dev \
+		liblapack-doc \
+		liblapack-dev \
+		libeigen3-dev \
+		octave
 
 
 ## Build and Run

@@ -28,7 +28,14 @@ default:
 deps:
 	@echo "Installing dependencies ..."
 	@sudo apt-get update
-	@sudo apt-get install -qqq liblapack-dev libeigen3-dev octave
+	@sudo apt-get install -qqq \
+		libblas-dev \
+		libblas-doc \
+		liblapacke-dev \
+		liblapack-doc \
+		liblapack-dev \
+		libeigen3-dev \
+		octave
 
 ba:
 	@make -s -C ba/c
