@@ -13,21 +13,37 @@ Minimal Bundle Adjustment Example:
 where red represents the ground truth and blue represents the initial camera
 poses and landmark points before and after bundle adjustment.
 
-Example output:
+Example output on a Lenovo ThinkPad P15 Gen 1 with Intel Core i7:
+
+Single precision mode:
 
 ```
 Solving BA problem:
-  - iter[0]   cost: 1.05e+06   time: 0.004s   rmse_reproj_error: 47.07px
-  - iter[1]   cost: 3.01e+04   time: 0.004s   rmse_reproj_error: 7.97px
-  - iter[2]   cost: 1.76e+02   time: 0.004s   rmse_reproj_error: 0.61px
-  - iter[3]   cost: 1.84e-01   time: 0.004s   rmse_reproj_error: 0.02px
-  - iter[4]   cost: 2.51e-04   time: 0.004s   rmse_reproj_error: 0.00px
-  - iter[5]   cost: 2.57e-06   time: 0.004s   rmse_reproj_error: 0.00px
+iter: [0]  lambda: 1.00e-04  cost: 3.0443e+04  dcost: -1.02e+06  rms reproj error: 11.35
+iter: [1]  lambda: 1.00e-05  cost: 1.7417e+02  dcost: -3.03e+04  rms reproj error: 0.86
+iter: [2]  lambda: 1.00e-06  cost: 9.8439e-02  dcost: -1.74e+02  rms reproj error: 0.02
+iter: [3]  lambda: 1.00e-07  cost: 6.8691e-07  dcost: -9.84e-02  rms reproj error: 0.00
 Done!
-total time taken: 0.0257s
+total time taken: 0.0239s
 nb_frames: 20
 nb_points: 25
 ```
+
+Double precision mode:
+
+```
+Solving BA problem:
+iter: [0]  lambda: 1.00e-04  cost: 3.0441e+04  dcost: -1.02e+06  rms reproj error: 11.35
+iter: [1]  lambda: 1.00e-05  cost: 1.7375e+02  dcost: -3.03e+04  rms reproj error: 0.86
+iter: [2]  lambda: 1.00e-06  cost: 9.7500e-02  dcost: -1.74e+02  rms reproj error: 0.02
+iter: [3]  lambda: 1.00e-07  cost: 1.1059e-07  dcost: -9.75e-02  rms reproj error: 0.00
+Done!
+total time taken: 0.0322s
+nb_frames: 20
+nb_points: 25
+```
+
+An approximate ~34% speed up of single vs double precision.
 
 ## Dependencies
 

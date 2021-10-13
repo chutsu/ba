@@ -1,19 +1,19 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#define PRECISION 1
+#define PRECISION 2
 #define MAX_LINE_LENGTH 9046
 #define USE_CBLAS
 #define USE_LAPACK
 
+#include <assert.h>
+#include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <string.h>
-#include <math.h>
-#include <time.h>
-#include <assert.h>
 #include <sys/time.h>
+#include <time.h>
 
 #ifdef USE_CBLAS
 #include <cblas.h>
@@ -31,26 +31,26 @@
 #ifdef NDEBUG
 #define DEBUG(M, ...)
 #else
-#define DEBUG(M, ...)                                                          \
+#define DEBUG(M, ...) \
   fprintf(stderr, "[DEBUG] %s:%d: " M "\n", __func__, __LINE__, ##__VA_ARGS__)
 #endif
 
 /* LOG */
-#define LOG_ERROR(M, ...)                                                      \
+#define LOG_ERROR(M, ...) \
   fprintf(stderr, "[ERROR] [%s] " M "\n", __func__, ##__VA_ARGS__)
 #define LOG_WARN(M, ...) fprintf(stderr, "[WARN] " M "\n", ##__VA_ARGS__)
 #define LOG_INFO(M, ...) fprintf(stderr, "[INFO] " M "\n", ##__VA_ARGS__)
 
 /* FATAL */
-#define FATAL(M, ...)                                                          \
-  fprintf(stderr, "[FATAL] " M "\n", ##__VA_ARGS__);                           \
+#define FATAL(M, ...)                                \
+  fprintf(stderr, "[FATAL] " M "\n", ##__VA_ARGS__); \
   exit(-1);
 
 /* CHECK */
-#define CHECK(A, M, ...)                                                       \
-  if (!(A)) {                                                                  \
-    log_err(M, ##__VA_ARGS__);                                                 \
-    goto error;                                                                \
+#define CHECK(A, M, ...)       \
+  if (!(A)) {                  \
+    log_err(M, ##__VA_ARGS__); \
+    goto error;                \
   }
 
 /******************************************************************************
@@ -79,9 +79,9 @@ real_t *load_vector(const char *file_path);
  *                                 MATHS
  ******************************************************************************/
 
-#define UNUSED(expr)                                                           \
-  do {                                                                         \
-    (void) (expr);                                                             \
+#define UNUSED(expr) \
+  do {               \
+    (void)(expr);    \
   } while (0)
 
 #ifndef M_PI
@@ -105,9 +105,7 @@ real_t sinc(const real_t x);
  *                              LINEAR ALGEBRA
  ******************************************************************************/
 
-void print_matrix(const char *prefix,
-                  const real_t *data,
-                  const size_t m,
+void print_matrix(const char *prefix, const real_t *data, const size_t m,
                   const size_t n);
 void print_vector(const char *prefix, const real_t *data, const size_t length);
 
@@ -117,34 +115,20 @@ void zeros(real_t *A, const size_t m, const size_t n);
 
 real_t *mat_new(const size_t m, const size_t n);
 int mat_cmp(const real_t *A, const real_t *B, const size_t m, const size_t n);
-int mat_equals(const real_t *A,
-               const real_t *B,
-               const size_t m,
-               const size_t n,
+int mat_equals(const real_t *A, const real_t *B, const size_t m, const size_t n,
                const real_t tol);
 int mat_save(const char *save_path, const real_t *A, const int m, const int n);
 real_t *mat_load(const char *save_path, int *nb_rows, int *nb_cols);
-void mat_set(real_t *A,
-             const size_t stride,
-             const size_t i,
-             const size_t j,
+void mat_set(real_t *A, const size_t stride, const size_t i, const size_t j,
              const real_t val);
-real_t
-mat_val(const real_t *A, const size_t stride, const size_t i, const size_t j);
+real_t mat_val(const real_t *A, const size_t stride, const size_t i,
+               const size_t j);
 void mat_copy(const real_t *src, const int m, const int n, real_t *dest);
-void mat_block_get(const real_t *A,
-                   const size_t stride,
-                   const size_t rs,
-                   const size_t cs,
-                   const size_t re,
-                   const size_t ce,
+void mat_block_get(const real_t *A, const size_t stride, const size_t rs,
+                   const size_t cs, const size_t re, const size_t ce,
                    real_t *block);
-void mat_block_set(real_t *A,
-                   const size_t stride,
-                   const size_t rs,
-                   const size_t cs,
-                   const size_t re,
-                   const size_t ce,
+void mat_block_set(real_t *A, const size_t stride, const size_t rs,
+                   const size_t cs, const size_t re, const size_t ce,
                    const real_t *block);
 void mat_diag_get(const real_t *A, const int m, const int n, real_t *d);
 void mat_diag_set(real_t *A, const int m, const int n, const real_t *d);
@@ -164,32 +148,18 @@ void vec_sub(const real_t *x, const real_t *y, real_t *z, size_t length);
 void vec_scale(real_t *x, const size_t length, const real_t scale);
 real_t vec_norm(const real_t *x, const size_t length);
 
-void dot(const real_t *A,
-         const size_t A_m,
-         const size_t A_n,
-         const real_t *B,
-         const size_t B_m,
-         const size_t B_n,
-         real_t *C);
+void dot(const real_t *A, const size_t A_m, const size_t A_n, const real_t *B,
+         const size_t B_m, const size_t B_n, real_t *C);
 void skew(const real_t x[3], real_t A[3 * 3]);
 void fwdsubs(const real_t *L, const real_t *b, real_t *y, const size_t n);
 void bwdsubs(const real_t *U, const real_t *y, real_t *x, const size_t n);
-int check_jacobian(const char *jac_name,
-                   const real_t *fdiff,
-                   const real_t *jac,
-                   const size_t m,
-                   const size_t n,
-                   const real_t tol,
+int check_jacobian(const char *jac_name, const real_t *fdiff, const real_t *jac,
+                   const size_t m, const size_t n, const real_t tol,
                    const int print);
 
 #ifdef USE_CBLAS
-void cblas_dot(const real_t *A,
-               const size_t A_m,
-               const size_t A_n,
-               const real_t *B,
-               const size_t B_m,
-               const size_t B_n,
-               real_t *C);
+void cblas_dot(const real_t *A, const size_t A_m, const size_t A_n,
+               const real_t *B, const size_t B_m, const size_t B_n, real_t *C);
 #endif
 
 /******************************************************************************
@@ -212,9 +182,7 @@ void chol(const real_t *A, const size_t n, real_t *L);
 void chol_solve(const real_t *A, const real_t *b, real_t *x, const size_t n);
 
 #ifdef USE_LAPACK
-void lapack_chol_solve(const real_t *A,
-                       const real_t *b,
-                       real_t *x,
+void lapack_chol_solve(const real_t *A, const real_t *b, real_t *x,
                        const size_t n);
 #endif
 
@@ -274,21 +242,17 @@ void image_init(image_t *img, uint8_t *data, int width, int height);
 /******************************** RADTAN **************************************/
 
 void radtan4_distort(const real_t params[4], const real_t p[2], real_t p_d[2]);
-void radtan4_point_jacobian(const real_t params[4],
-                            const real_t p[2],
+void radtan4_point_jacobian(const real_t params[4], const real_t p[2],
                             real_t J_point[2 * 2]);
-void radtan4_params_jacobian(const real_t params[4],
-                             const real_t p[2],
+void radtan4_params_jacobian(const real_t params[4], const real_t p[2],
                              real_t J_param[2 * 4]);
 
 /********************************* EQUI ***************************************/
 
 void equi4_distort(const real_t params[4], const real_t p[2], real_t p_d[2]);
-void equi4_point_jacobian(const real_t params[4],
-                          const real_t p[2],
+void equi4_point_jacobian(const real_t params[4], const real_t p[2],
                           real_t J_point[2 * 2]);
-void equi4_params_jacobian(const real_t params[4],
-                           const real_t p[2],
+void equi4_params_jacobian(const real_t params[4], const real_t p[2],
                            real_t J_param[2 * 4]);
 
 /******************************** PINHOLE *************************************/
@@ -297,32 +261,25 @@ real_t pinhole_focal(const int image_width, const real_t fov);
 int pinhole_project(const real_t params[4], const real_t p_C[3], real_t x[2]);
 
 void pinhole_point_jacobian(const real_t params[4], real_t J_point[2 * 3]);
-void pinhole_params_jacobian(const real_t params[4],
-                             const real_t x[2],
+void pinhole_params_jacobian(const real_t params[4], const real_t x[2],
                              real_t J[2 * 4]);
 
 /**************************** PINHOLE-RADTAN4 *********************************/
 
-void pinhole_radtan4_project(const real_t params[8],
-                             const real_t p_C[3],
+void pinhole_radtan4_project(const real_t params[8], const real_t p_C[3],
                              real_t x[2]);
 void pinhole_radtan4_project_jacobian(const real_t params[8],
-                                      const real_t p_C[3],
-                                      real_t J[2 * 3]);
+                                      const real_t p_C[3], real_t J[2 * 3]);
 void pinhole_radtan4_params_jacobian(const real_t params[8],
-                                     const real_t p_C[3],
-                                     real_t J[2 * 8]);
+                                     const real_t p_C[3], real_t J[2 * 8]);
 
 /***************************** PINHOLE-EQUI4 **********************************/
 
-void pinhole_equi4_project(const real_t params[8],
-                           const real_t p_C[3],
+void pinhole_equi4_project(const real_t params[8], const real_t p_C[3],
                            real_t x[2]);
-void pinhole_equi4_project_jacobian(const real_t params[8],
-                                    const real_t p_C[3],
+void pinhole_equi4_project_jacobian(const real_t params[8], const real_t p_C[3],
                                     real_t J[2 * 3]);
-void pinhole_equi4_params_jacobian(const real_t params[8],
-                                   const real_t p_C[3],
+void pinhole_equi4_params_jacobian(const real_t params[8], const real_t p_C[3],
                                    real_t J[2 * 8]);
 
-#endif // ZERO_H
+#endif  // ZERO_H
