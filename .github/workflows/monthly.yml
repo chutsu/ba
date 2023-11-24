@@ -1,0 +1,19 @@
+name: Monthly Job
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # Run at midnight on the 1st day of every month
+
+jobs:
+  monthly:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@master
+    - name: install deps
+      run: make deps
+    - name: build
+      run: make ba
+    - name: run
+      run: make run
+    - name: unittest
+      run: make unittest
