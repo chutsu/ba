@@ -113,7 +113,8 @@ char **dsv_fields(const char *fp, const char delim, int *nb_fields) {
   return fields;
 }
 
-real_t **dsv_data(const char *fp, const char delim, int *nb_rows, int *nb_cols) {
+real_t **dsv_data(const char *fp, const char delim, int *nb_rows,
+                  int *nb_cols) {
   assert(fp != NULL);
 
   /* Obtain number of rows and columns in dsv data */
@@ -310,7 +311,7 @@ real_t *load_vector(const char *file_path) {
  ******************************************************************************/
 
 float randf(float a, float b) {
-  float random = ((float) rand()) / (float) RAND_MAX;
+  float random = ((float)rand()) / (float)RAND_MAX;
   float diff = b - a;
   float r = random * diff;
   return a + r;
@@ -377,9 +378,7 @@ real_t sinc(const real_t x) {
  *                              LINEAR ALGEBRA
  ******************************************************************************/
 
-void print_matrix(const char *prefix,
-                  const real_t *data,
-                  const size_t m,
+void print_matrix(const char *prefix, const real_t *data, const size_t m,
                   const size_t n) {
   assert(prefix != NULL);
   assert(data != NULL);
@@ -474,10 +473,7 @@ int mat_cmp(const real_t *A, const real_t *B, const size_t m, const size_t n) {
   return 0;
 }
 
-int mat_equals(const real_t *A,
-               const real_t *B,
-               const size_t m,
-               const size_t n,
+int mat_equals(const real_t *A, const real_t *B, const size_t m, const size_t n,
                const real_t tol) {
   size_t index = 0;
 
@@ -576,18 +572,15 @@ real_t *mat_load(const char *mat_path, int *nb_rows, int *nb_cols) {
   return A;
 }
 
-void mat_set(real_t *A,
-             const size_t stride,
-             const size_t i,
-             const size_t j,
+void mat_set(real_t *A, const size_t stride, const size_t i, const size_t j,
              const real_t val) {
   assert(A != NULL);
   assert(stride != 0);
   A[(i * stride) + j] = val;
 }
 
-real_t
-mat_val(const real_t *A, const size_t stride, const size_t i, const size_t j) {
+real_t mat_val(const real_t *A, const size_t stride, const size_t i,
+               const size_t j) {
   assert(A != NULL);
   assert(stride != 0);
   return A[(i * stride) + j];
@@ -599,12 +592,8 @@ void mat_copy(const real_t *src, const int m, const int n, real_t *dest) {
   }
 }
 
-void mat_block_get(const real_t *A,
-                   const size_t stride,
-                   const size_t rs,
-                   const size_t cs,
-                   const size_t re,
-                   const size_t ce,
+void mat_block_get(const real_t *A, const size_t stride, const size_t rs,
+                   const size_t cs, const size_t re, const size_t ce,
                    real_t *block) {
   assert(A != block);
   assert(stride != 0);
@@ -618,12 +607,8 @@ void mat_block_get(const real_t *A,
   }
 }
 
-void mat_block_set(real_t *A,
-                   const size_t stride,
-                   const size_t rs,
-                   const size_t cs,
-                   const size_t re,
-                   const size_t ce,
+void mat_block_set(real_t *A, const size_t stride, const size_t rs,
+                   const size_t cs, const size_t re, const size_t ce,
                    const real_t *block) {
   assert(A != block);
   assert(stride != 0);
@@ -788,13 +773,8 @@ real_t vec_norm(const real_t *x, const size_t length) {
   return sqrt(sum);
 }
 
-void dot(const real_t *A,
-         const size_t A_m,
-         const size_t A_n,
-         const real_t *B,
-         const size_t B_m,
-         const size_t B_n,
-         real_t *C) {
+void dot(const real_t *A, const size_t A_m, const size_t A_n, const real_t *B,
+         const size_t B_m, const size_t B_n, real_t *C) {
   assert(A != NULL && B != NULL && A != C && B != C);
   assert(A_m > 0 && A_n > 0 && B_m > 0 && B_n > 0);
   assert(A_n == B_m);
@@ -841,19 +821,15 @@ void fwdsubs(const real_t *L, const real_t *b, real_t *y, const size_t n) {
 void bwdsubs(const real_t *U, const real_t *y, real_t *x, const size_t n) {
   for (int i = n - 1; i >= 0; i--) {
     real_t alpha = y[i];
-    for (int j = i; j < (int) n; j++) {
+    for (int j = i; j < (int)n; j++) {
       alpha -= U[i * n + j] * x[j];
     }
     x[i] = alpha / U[i * n + i];
   }
 }
 
-int check_jacobian(const char *jac_name,
-                   const real_t *fdiff,
-                   const real_t *jac,
-                   const size_t m,
-                   const size_t n,
-                   const real_t tol,
+int check_jacobian(const char *jac_name, const real_t *fdiff, const real_t *jac,
+                   const size_t m, const size_t n, const real_t tol,
                    const int print) {
   int retval = 0;
   int ok = 1;
@@ -892,13 +868,8 @@ int check_jacobian(const char *jac_name,
 }
 
 #ifdef USE_CBLAS
-void cblas_dot(const real_t *A,
-               const size_t A_m,
-               const size_t A_n,
-               const real_t *B,
-               const size_t B_m,
-               const size_t B_n,
-               real_t *C) {
+void cblas_dot(const real_t *A, const size_t A_m, const size_t A_n,
+               const real_t *B, const size_t B_m, const size_t B_n, real_t *C) {
   UNUSED(B_m);
   assert(A != NULL && B != NULL && C != NULL);
   assert(A_m > 0 && A_n > 0 && B_m > 0 && B_n > 0);
@@ -991,7 +962,14 @@ void cblas_dot(const real_t *A,
  */
 int svdcomp(real_t *A, int m, int n, real_t *w, real_t *V) {
   /* assert(m < n); */
-  int flag, i, its, j, jj, k, l, nm;
+  int flag = 0;
+  int i = 0;
+  int its = 0;
+  int j = 0;
+  int jj = 0;
+  int k = 0;
+  int l = 0;
+  int nm = 0;
   real_t c, f, h, s, x, y, z;
   real_t anorm = 0.0, g = 0.0, scale = 0.0;
 
@@ -1069,8 +1047,7 @@ int svdcomp(real_t *A, int m, int n, real_t *w, real_t *V) {
             }
           }
         }
-        for (k = l; k < n; k++)
-          A[i * n + k] = (A[i * n + k] * scale);
+        for (k = l; k < n; k++) A[i * n + k] = (A[i * n + k] * scale);
       }
     }
     anorm = MAX(anorm, (fabs(w[i]) + fabs(rv1[i])));
@@ -1146,8 +1123,7 @@ int svdcomp(real_t *A, int m, int n, real_t *w, real_t *V) {
           flag = 0;
           break;
         }
-        if (fabs(w[nm]) + anorm == anorm)
-          break;
+        if (fabs(w[nm]) + anorm == anorm) break;
       }
       if (flag) {
         c = 0.0;
@@ -1174,13 +1150,12 @@ int svdcomp(real_t *A, int m, int n, real_t *w, real_t *V) {
       if (l == k) {    /* convergence */
         if (z < 0.0) { /* make singular value nonnegative */
           w[k] = (-z);
-          for (j = 0; j < n; j++)
-            V[j * n + k] = (-V[j * n + k]);
+          for (j = 0; j < n; j++) V[j * n + k] = (-V[j * n + k]);
         }
         break;
       }
       if (its >= 30) {
-        free((void *) rv1);
+        free((void *)rv1);
         fprintf(stderr, "No convergence after 30,000! iterations \n");
         return (0);
       }
@@ -1301,7 +1276,6 @@ void chol(const real_t *A, const size_t n, real_t *L) {
 
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < (i + 1); j++) {
-
       if (i == j) {
         real_t s = 0.0;
         for (size_t k = 0; k < j; k++) {
@@ -1333,7 +1307,7 @@ void chol_solve(const real_t *A, const real_t *b, real_t *x, const size_t n) {
   /* Forward substitution */
   /* Ax = b -> LLt x = b. */
   /* Let y = Lt x, L y = b (Solve for y) */
-  for (int i = 0; i < (int) n; i++) {
+  for (int i = 0; i < (int)n; i++) {
     real_t alpha = b[i];
 
     if (fltcmp(L[i * n + i], 0.0) == 0) {
@@ -1356,7 +1330,7 @@ void chol_solve(const real_t *A, const real_t *b, real_t *x, const size_t n) {
       x[i] = 0.0;
 
     } else {
-      for (int j = i; j < (int) n; j++) {
+      for (int j = i; j < (int)n; j++) {
         alpha -= Lt[i * n + j] * x[j];
       }
       x[i] = alpha / Lt[i * n + i];
@@ -1370,9 +1344,13 @@ void chol_solve(const real_t *A, const real_t *b, real_t *x, const size_t n) {
 }
 
 #ifdef USE_LAPACK
-void lapack_chol_solve(const real_t *A,
-                       const real_t *b,
-                       real_t *x,
+extern int spotrf_(char *, int *, float *, int *, int *);
+extern int dpotrf_(char *, int *, double *, int *, int *);
+extern int spotrs_(char *, int *, int *, float *, int *, float *, int *, int *);
+extern int dpotrs_(char *, int *, int *, double *, int *, double *, int *,
+                   int *);
+
+void lapack_chol_solve(const real_t *A, const real_t *b, real_t *x,
                        const size_t m) {
   /* Cholesky Decomposition */
   int info = 0;
@@ -1433,7 +1411,7 @@ float mtoc(struct timespec *tic) { return toc(tic) * 1000.0; }
 float time_now() {
   struct timeval t;
   gettimeofday(&t, NULL);
-  return ((float) t.tv_sec + ((float) t.tv_usec) / 1000000.0);
+  return ((float)t.tv_sec + ((float)t.tv_usec) / 1000000.0);
 }
 
 /******************************************************************************
@@ -1737,25 +1715,25 @@ void rot2quat(const real_t C[3 * 3], real_t q[4]) {
   real_t qz = 0.0f;
 
   if (tr > 0) {
-    S = sqrt(tr + 1.0) * 2; // S=4*qw
+    S = sqrt(tr + 1.0) * 2;  // S=4*qw
     qw = 0.25 * S;
     qx = (C21 - C12) / S;
     qy = (C02 - C20) / S;
     qz = (C10 - C01) / S;
   } else if ((C00 > C11) && (C[0] > C22)) {
-    S = sqrt(1.0 + C[0] - C11 - C22) * 2; // S=4*qx
+    S = sqrt(1.0 + C[0] - C11 - C22) * 2;  // S=4*qx
     qw = (C21 - C12) / S;
     qx = 0.25 * S;
     qy = (C01 + C10) / S;
     qz = (C02 + C20) / S;
   } else if (C11 > C22) {
-    S = sqrt(1.0 + C11 - C[0] - C22) * 2; // S=4*qy
+    S = sqrt(1.0 + C11 - C[0] - C22) * 2;  // S=4*qy
     qw = (C02 - C20) / S;
     qx = (C01 + C10) / S;
     qy = 0.25 * S;
     qz = (C12 + C21) / S;
   } else {
-    S = sqrt(1.0 + C22 - C[0] - C11) * 2; // S=4*qz
+    S = sqrt(1.0 + C22 - C[0] - C11) * 2;  // S=4*qz
     qw = (C10 - C01) / S;
     qx = (C02 + C20) / S;
     qy = (C12 + C21) / S;
@@ -1926,8 +1904,7 @@ void radtan4_distort(const real_t params[4], const real_t p[2], real_t p_d[2]) {
   p_d[1] = y_ddash;
 }
 
-void radtan4_point_jacobian(const real_t params[4],
-                            const real_t p[2],
+void radtan4_point_jacobian(const real_t params[4], const real_t p[2],
                             real_t J_point[2 * 2]) {
   /* Distortion parameters */
   const real_t k1 = params[0];
@@ -1954,8 +1931,7 @@ void radtan4_point_jacobian(const real_t params[4],
   J_point[3] += y * (2 * k1 * y + 4 * k2 * y * r2) + 1;
 }
 
-void radtan4_params_jacobian(const real_t params[4],
-                             const real_t p[2],
+void radtan4_params_jacobian(const real_t params[4], const real_t p[2],
                              real_t J_param[2 * 4]) {
   UNUSED(params);
 
@@ -2009,8 +1985,7 @@ void equi4_distort(const real_t params[4], const real_t p[2], real_t p_d[2]) {
   p_d[1] = y_dash;
 }
 
-void equi4_point_jacobian(const real_t params[4],
-                          const real_t p[2],
+void equi4_point_jacobian(const real_t params[4], const real_t p[2],
                           real_t J_point[2 * 2]) {
   const real_t k1 = params[0];
   const real_t k2 = params[1];
@@ -2043,8 +2018,7 @@ void equi4_point_jacobian(const real_t params[4],
   J_point[3] = s + y * s_r * r_y;
 }
 
-void equi4_params_jacobian(const real_t params[4],
-                           const real_t p[2],
+void equi4_params_jacobian(const real_t params[4], const real_t p[2],
                            real_t J_param[2 * 4]) {
   UNUSED(params);
 
@@ -2099,8 +2073,7 @@ void pinhole_point_jacobian(const real_t params[4], real_t J[2 * 3]) {
   J[3] = params[1];
 }
 
-void pinhole_params_jacobian(const real_t params[4],
-                             const real_t x[2],
+void pinhole_params_jacobian(const real_t params[4], const real_t x[2],
                              real_t J[2 * 4]) {
   UNUSED(params);
 
@@ -2117,8 +2090,7 @@ void pinhole_params_jacobian(const real_t params[4],
 
 /***************************** PINHOLE-RADTAN4 ********************************/
 
-void pinhole_radtan4_project(const real_t params[8],
-                             const real_t p_C[3],
+void pinhole_radtan4_project(const real_t params[8], const real_t p_C[3],
                              real_t x[2]) {
   /* Project */
   const real_t p[2] = {p_C[0] / p_C[2], p_C[1] / p_C[2]};
@@ -2139,8 +2111,7 @@ void pinhole_radtan4_project(const real_t params[8],
 }
 
 void pinhole_radtan4_project_jacobian(const real_t params[8],
-                                      const real_t p_C[3],
-                                      real_t J[2 * 3]) {
+                                      const real_t p_C[3], real_t J[2 * 3]) {
   /* Project */
   const real_t x = p_C[0];
   const real_t y = p_C[0];
@@ -2176,8 +2147,7 @@ void pinhole_radtan4_project_jacobian(const real_t params[8],
 }
 
 void pinhole_radtan4_params_jacobian(const real_t params[8],
-                                     const real_t p_C[3],
-                                     real_t J[2 * 8]) {
+                                     const real_t p_C[3], real_t J[2 * 8]) {
   const real_t fx = params[0];
   const real_t fy = params[1];
   const real_t cx = params[2];
@@ -2209,7 +2179,7 @@ void pinhole_radtan4_params_jacobian(const real_t params[8],
   pinhole_point_jacobian(k, J_proj_point);
 
   /* Distortion point Jacobian: J_dist_params */
-  real_t J_dist_params[2 * 2] = {0};
+  real_t J_dist_params[2 * 4] = {0};
   radtan4_params_jacobian(d, p, J_dist_params);
 
   /* J = [J_proj_params, J_proj_point * J_dist_params] */
@@ -2222,14 +2192,11 @@ void pinhole_radtan4_params_jacobian(const real_t params[8],
   J[9] = J_proj_params[5];
   J[10] = J_proj_params[6];
   J[11] = J_proj_params[7];
-
-
 }
 
 /****************************** PINHOLE-EQUI4 *********************************/
 
-void pinhole_equi4_project(const real_t params[8],
-                           const real_t p_C[3],
+void pinhole_equi4_project(const real_t params[8], const real_t p_C[3],
                            real_t x[2]) {
   /* Project */
   const real_t p[2] = {p_C[0] / p_C[2], p_C[1] / p_C[2]};
@@ -2249,8 +2216,7 @@ void pinhole_equi4_project(const real_t params[8],
   x[1] = p[1] * fy + cy;
 }
 
-void pinhole_equi4_project_jacobian(const real_t params[8],
-                                    const real_t p_C[3],
+void pinhole_equi4_project_jacobian(const real_t params[8], const real_t p_C[3],
                                     real_t J[2 * 3]) {
   /* Project */
   const real_t x = p_C[0];
